@@ -24,8 +24,13 @@ class SongList(APIView):
 
 
 class SongDetail(APIView):
-    def get_song(self, song_ID):
+    def get_song(self, id):
         try:
-            return Song.objects.get(id=song_ID)
+            return Song.objects.get(id=id)
         except Song.DoesNotExist:
             raise Http404
+
+    def get(self, request, id):
+        song = self.get_song(id)
+        serializer = SongSerializer(song)
+        return Response(serializer.data, status=status.HTTP_200_OK)
